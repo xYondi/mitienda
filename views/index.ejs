@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Tienda de Ropa Moderna</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts para tipografía moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- AOS CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <!-- Tu CSS personalizado -->
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .bg-dark {
+      background-color: #1a1a1a !important;
+    }
+    .navbar-dark .navbar-nav .nav-link {
+      color: #ffffff !important;
+      transition: color 0.3s ease;
+    }
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: #ff6b6b !important;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #ff6b6b !important;
+    }
+    .hero-section {
+      background: linear-gradient(135deg, #1a1a1a, #333);
+      color: #fff;
+      padding: 100px 0;
+      text-align: center;
+    }
+    .hero-section h2 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 1.25rem;
+      margin-bottom: 40px;
+    }
+    .btn-modern {
+      background: #ff6b6b;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      padding: 1rem 2.5rem;
+      font-size: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    .btn-modern:hover {
+      background: #ff4c4c;
+      box-shadow: 0px 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    .card-img-top {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      height: 250px;
+      object-fit: cover;
+    }
+    .card-body {
+      background-color: #ffffff;
+      padding: 1.5rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+    .card-text {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .btn-outline-dark {
+      border-radius: 50px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-outline-dark:hover {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+    footer {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #1a1a1a;
+      text-align: center;
+    }
+    .featured-section {
+      padding: 80px 0;
+      background-color: #ffffff;
+    }
+    .product-section {
+      padding: 80px 0;
+    }
+
+    /* Animación de íconos */
+    .nav-link i,
+    .btn-modern i {
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .nav-link:hover i {
+      transform: scale(1.2); /* Escala el ícono al 120% */
+      color: #ff6b6b; /* Cambia el color al hacer hover */
+    }
+    .btn-modern:hover i {
+      transform: scale(1.2); /* Escala el ícono al 120% */
+      color: #fff; /* Cambia el color al hacer hover */
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="bg-dark text-white py-3">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Mi Tienda de Ropa</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <span class="nav-link">Hola, <%= userName || 'Invitado' %>!</span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Perfil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/"><i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <% if (userName) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> Carrito</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+              </li>
+            <% } else { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+              </li>
+            <% } %>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" data-aos="fade-up">
+    <div class="container">
+      <h2>Bienvenido a nuestra tienda de ropa moderna</h2>
+      <p>Explora nuestra colección y encuentra tu estilo perfecto.</p>
+      <a href="/catalog" class="btn btn-modern"><i class="fas fa-th-large"></i> Ver Catálogo</a>
+    </div>
+  </section>
+
+  <!-- Featured Section -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Destacados</h2>
+      <div class="row">
+        <% products.slice(0, 3).forEach(product => { %>
+          <div class="col-md-4 mb-4" data-aos="fade-up">
+            <div class="card h-100">
+              <img src="<%= product.image %>" class="card-img-top" alt="<%= product.name %>">
+              <div class="card-body">
+                <h5 class="card-title"><%= product.name %></h5>
+                <p class="card-text"><%= product.description %></p>
+                <p class="card-text fw-bold">$<%= product.price.toFixed(2) %></p>
+                <a href="/product/<%= product.id %>" class="btn btn-outline-dark"><i class="fas fa-eye"></i> Ver Detalles</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Mi Tienda de Ropa. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- AOS JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      offset: 200,
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false,
+    });
+  </script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

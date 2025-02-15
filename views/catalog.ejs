@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo - Mi Tienda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- AOS CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <!-- Tu CSS personalizado -->
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .bg-dark {
+      background-color: #333333 !important;
+    }
+    .btn-modern {
+      background: linear-gradient(135deg, #ff5722, #ff9800);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      padding: 0.75rem 2rem;
+      font-size: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    .btn-modern:hover {
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+    }
+    .card-img-top {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .card-img-top:hover {
+      transform: scale(1.1);
+    }
+    .card-body {
+      background-color: #ffffff;
+      padding: 1.5rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333333;
+    }
+    .card-text {
+      color: #666666;
+    }
+    .btn-outline-dark {
+      border-radius: 50px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .btn-outline-dark:hover {
+      background-color: #333333;
+      color: #ffffff;
+    }
+    main {
+      flex-grow: 1;
+    }
+    footer {
+      background-color: #333333;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="bg-dark text-white py-3" data-aos="fade-in">
+    <div class="container">
+      <h1>Catálogo de Productos</h1>
+      <nav>
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link text-white" href="/"><i class="fas fa-home"></i> Inicio</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="/catalog"><i class="fas fa-th-large"></i> Catálogo</a></li>
+          <% if (userName) { %>
+            <li class="nav-item"><a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+          <% } else { %>
+            <li class="nav-item"><a class="nav-link text-white" href="/login">Iniciar Sesión</a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mt-4">
+    <!-- Filtro de Categorías -->
+    <div class="mb-4">
+      <h4>Filtrar por categoría:</h4>
+      <form action="/catalog" method="GET">
+        <select name="category" class="form-select" onchange="this.form.submit()">
+          <option value="">Todas las categorías</option>
+          <% categories.forEach(category => { %>
+            <option value="<%= category.id %>"><%= category.name %></option>
+          <% }) %>
+        </select>
+      </form>
+    </div>
+
+    <section class="catalog">
+      <div class="row g-4">
+        <% products.forEach((product, index) => { %>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+            <div class="card h-100">
+              <img src="<%= product.image || 'https://via.placeholder.com/300' %>" class="card-img-top" alt="<%= product.name %>">
+              <div class="card-body">
+                <h5 class="card-title"><%= product.name %></h5>
+                <p class="card-text">$<%= typeof product.price === 'number' ? product.price.toFixed(2) : 'N/A' %></p>
+                <a href="/product/<%= product.id %>" class="btn btn-outline-dark w-100">Ver Detalles</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- Sección para agregar un nuevo producto -->
+    <h3 class="mt-5">Agregar Producto</h3>
+    <form action="/catalog/add-product" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Descripción</label>
+        <input type="text" class="form-control" id="description" name="description" required>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Precio</label>
+        <input type="number" class="form-control" id="price" name="price" required>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Imagen URL</label>
+        <input type="text" class="form-control" id="image" name="image" required>
+      </div>
+      <div class="mb-3">
+        <label for="category_id" class="form-label">Categoría</label>
+        <select class="form-select" id="category_id" name="category_id" required>
+          <% categories.forEach(category => { %>
+            <option value="<%= category.id %>"><%= category.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar Producto</button>
+    </form>
+
+    <!-- Sección para mostrar las categorías -->
+    <h3 class="mt-5">Categorías</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% categories.forEach(category => { %>
+          <tr>
+            <td><%= category.id %></td>
+            <td><%= category.name %></td>
+            <td>
+              <form action="/catalog/remove-category/<%= category.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h3 class="mt-5">Agregar Categoría</h3>
+    <form action="/catalog/add-category" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre de la Categoría</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar Categoría</button>
+    </form>
+
+    <!-- Tablas de Productos y Categorías -->
+    <h3 class="mt-5">Productos</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(product => { %>
+          <tr>
+            <td><%= product.id %></td>
+            <td><%= product.name %></td>
+            <td><%= product.description %></td>
+            <td>$<%= typeof product.price === 'number' ? product.price.toFixed(2) : 'N/A' %></td>
+            <td>
+              <form action="/catalog/remove-product/<%= product.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="bg-dark text-white py-4 mt-auto" data-aos="fade-in">
+    <div class="container text-center">
+      <p class="mb-3">&copy; 2025 Mi Tienda. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- AOS JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      offset: 200,
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false,
+    });
+  </script>
+  <!-- Bootstrap 5 JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
